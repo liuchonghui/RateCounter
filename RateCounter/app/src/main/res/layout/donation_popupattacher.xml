@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#88000000">
+
+    <RelativeLayout
+        android:id="@+id/popup_animation_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/gift_pop_bg"
+        android:padding="10dp">
+
+        <LinearLayout android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView android:id="@+id/years"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:text="年限"
+                android:textColor="#666666"/>
+            <TextView android:id="@+id/benjin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_weight="2"
+                android:paddingLeft="0dp"
+                android:textSize="14sp"
+                android:text="当年本金"
+                android:textColor="#666666"/>
+            <TextView android:id="@+id/zongjine"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_weight="2"
+                android:paddingLeft="0dp"
+                android:textSize="14sp"
+                android:text="当年总金额"
+                android:textColor="#666666"/>
+
+        </LinearLayout>
+        <ListView android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_below="@+id/top_layout"
+            android:scrollbars="none"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

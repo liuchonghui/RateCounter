@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
+    android:background="#ffffff"
+    android:orientation="horizontal">
+    <TextView android:id="@+id/years"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="14sp"
+        android:text="第1年"
+        android:textColor="#999999"/>
+    <TextView android:id="@+id/benjin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_weight="2"
+        android:paddingLeft="0dp"
+        android:textSize="14sp"
+        android:text="12345"
+        android:textColor="#999999"/>
+    <TextView android:id="@+id/zongjine"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_weight="2"
+        android:paddingLeft="0dp"
+        android:textSize="14sp"
+        android:text="12345.67"
+        android:textColor="#999999"/>
+</LinearLayout>

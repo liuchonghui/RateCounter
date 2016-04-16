@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.android.overlay.utils.LogUtils;
 
 import tool.ratecounter.activity.CustomWaitDialog;
+import tool.ratecounter.android.DonationPopupAttacher;
 import tool.ratecounter.android.MoneyInputVerifier;
 import tool.ratecounter.android.R;
 import tool.ratecounter.android.RateInputVerifier;
@@ -68,6 +70,10 @@ public class MainFragment extends BaseFragment {
     EditText rate;
     EditText years;
     Button confirm;
+    boolean markState = false;
+    View markbox;
+    CheckBox checkbox;
+    DonationPopupAttacher attacher;
 
     @SuppressLint("InflateParams")
     protected void intView(View view) {
@@ -76,7 +82,7 @@ public class MainFragment extends BaseFragment {
 
         yuan = (EditText) view.findViewById(R.id.yuan);
         rate = (EditText) view.findViewById(R.id.rate);
-        years = (EditText)view.findViewById(R.id.years);
+        years = (EditText) view.findViewById(R.id.years);
 
         yuan.addTextChangedListener(new MoneyInputVerifier(yuan));
         rate.addTextChangedListener(new RateInputVerifier(rate));
@@ -87,11 +93,42 @@ public class MainFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 String yuanStr = yuan.getText().toString().trim();
+                if (yuanStr == null || yuanStr.length() == 0) {
+                    yuanStr = yuan.getHint().toString().trim();
+                }
                 String rateStr = rate.getText().toString().trim();
+                if (rateStr == null || rateStr.length() == 0) {
+                    rateStr = rate.getHint().toString().trim();
+                }
                 String yearStr = years.getText().toString().trim();
+                if (yearStr == null || yearStr.length() == 0) {
+                    yearStr = years.getHint().toString().trim();
+                }
                 LogUtils.d("RC", "yuan=" + yuanStr + ", rate=" + rateStr + ", year=" + yearStr);
+                if (null == attacher) {
+                    attacher = new DonationPopupAttacher(getActivity());
+                }
+                attacher.setData(yuanStr, rateStr, yearStr, markState);
+                attacher.toggle();
             }
         });
+
+        markbox = view.findViewById(R.id.mark_layout);
+        checkbox = (CheckBox) view.findViewById(R.id.markbox);
+        checkbox.setChecked(markState);
+        markbox.setOnClickListener(new MarkClickListener());
+    }
+
+    class MarkClickListener implements View.OnClickListener {
+
+        public MarkClickListener() {
+        }
+
+        @Override
+        public void onClick(View view) {
+            markState = !markState;
+            checkbox.setChecked(markState);
+        }
     }
 
     protected void flushPage() {
@@ -120,9 +157,9 @@ public class MainFragment extends BaseFragment {
     }
 
     public boolean holdGoBack() {
-        // if (myOneKeyShare != null && myOneKeyShare.isShow()) {
-        // return true;
-        // }
+        if (attacher != null && attacher.isShowing()) {
+            return true;
+        }
         // if (popupAttacher != null && popupAttacher.isShowing()) {
         // return true;
         // }
@@ -133,9 +170,9 @@ public class MainFragment extends BaseFragment {
         boolean flag = false;
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (holdGoBack()) {
-                // if (myOneKeyShare != null && myOneKeyShare.isShow()) {
-                // myOneKeyShare.close();
-                // }
+                if (attacher != null && attacher.isShowing()) {
+                    attacher.closePop();
+                }
                 // if (popupAttacher != null && popupAttacher.isShowing()) {
                 // popupAttacher.closePop();
                 // }
