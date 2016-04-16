@@ -7,9 +7,16 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.android.overlay.utils.LogUtils;
 
 import tool.ratecounter.activity.CustomWaitDialog;
+import tool.ratecounter.android.MoneyInputVerifier;
 import tool.ratecounter.android.R;
+import tool.ratecounter.android.RateInputVerifier;
+import tool.ratecounter.android.YearsInputVerifier;
 
 /**
  * @author liu_chonghui
@@ -57,12 +64,34 @@ public class MainFragment extends BaseFragment {
     }
 
     CustomWaitDialog mUpdateDialog;
+    EditText yuan;
+    EditText rate;
+    EditText years;
+    Button confirm;
 
     @SuppressLint("InflateParams")
     protected void intView(View view) {
         mUpdateDialog = new CustomWaitDialog(getActivity());
         mUpdateDialog.setCanceledOnTouchOutside(false);
 
+        yuan = (EditText) view.findViewById(R.id.yuan);
+        rate = (EditText) view.findViewById(R.id.rate);
+        years = (EditText)view.findViewById(R.id.years);
+
+        yuan.addTextChangedListener(new MoneyInputVerifier(yuan));
+        rate.addTextChangedListener(new RateInputVerifier(rate));
+        years.addTextChangedListener(new YearsInputVerifier(years));
+
+        confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String yuanStr = yuan.getText().toString().trim();
+                String rateStr = rate.getText().toString().trim();
+                String yearStr = years.getText().toString().trim();
+                LogUtils.d("RC", "yuan=" + yuanStr + ", rate=" + rateStr + ", year=" + yearStr);
+            }
+        });
     }
 
     protected void flushPage() {
