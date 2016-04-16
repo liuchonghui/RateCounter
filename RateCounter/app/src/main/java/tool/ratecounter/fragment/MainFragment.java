@@ -14,6 +14,7 @@ import android.widget.EditText;
 import com.android.overlay.utils.LogUtils;
 
 import tool.ratecounter.activity.CustomWaitDialog;
+import tool.ratecounter.android.AddPopupAttacher;
 import tool.ratecounter.android.DonationPopupAttacher;
 import tool.ratecounter.android.MoneyInputVerifier;
 import tool.ratecounter.android.R;
@@ -74,6 +75,7 @@ public class MainFragment extends BaseFragment {
     View markbox;
     CheckBox checkbox;
     DonationPopupAttacher attacher;
+    AddPopupAttacher attacher2;
 
     @SuppressLint("InflateParams")
     protected void intView(View view) {
@@ -108,7 +110,7 @@ public class MainFragment extends BaseFragment {
                 if (null == attacher) {
                     attacher = new DonationPopupAttacher(getActivity());
                 }
-                attacher.setData(yuanStr, rateStr, yearStr, markState);
+                attacher.setData(yuanStr, rateStr, yearStr, markState, addYear);
                 attacher.toggle();
             }
         });
@@ -119,6 +121,8 @@ public class MainFragment extends BaseFragment {
         markbox.setOnClickListener(new MarkClickListener());
     }
 
+    int addYear;
+
     class MarkClickListener implements View.OnClickListener {
 
         public MarkClickListener() {
@@ -128,6 +132,22 @@ public class MainFragment extends BaseFragment {
         public void onClick(View view) {
             markState = !markState;
             checkbox.setChecked(markState);
+            if (markState) {
+                if (attacher2 == null) {
+                    attacher2 = new AddPopupAttacher(getActivity()) {
+                        @Override
+                        protected void refreshYears(int year) {
+                            addYear = year;
+                        }
+                    };
+                }
+                String yearStr = years.getText().toString().trim();
+                if (yearStr == null || yearStr.length() == 0) {
+                    yearStr = years.getHint().toString().trim();
+                }
+                attacher2.setData(Integer.valueOf(yearStr));
+                attacher2.toggle();
+            }
         }
     }
 
@@ -160,9 +180,9 @@ public class MainFragment extends BaseFragment {
         if (attacher != null && attacher.isShowing()) {
             return true;
         }
-        // if (popupAttacher != null && popupAttacher.isShowing()) {
-        // return true;
-        // }
+        if (attacher2 != null && attacher2.isShowing()) {
+            return true;
+        }
         return false;
     }
 
@@ -173,9 +193,9 @@ public class MainFragment extends BaseFragment {
                 if (attacher != null && attacher.isShowing()) {
                     attacher.closePop();
                 }
-                // if (popupAttacher != null && popupAttacher.isShowing()) {
-                // popupAttacher.closePop();
-                // }
+                if (attacher2 != null && attacher2.isShowing()) {
+                    attacher2.closePop();
+                }
                 flag = true;
             }
         }

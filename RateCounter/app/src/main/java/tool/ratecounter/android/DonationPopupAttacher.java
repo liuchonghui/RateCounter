@@ -49,7 +49,9 @@ public class DonationPopupAttacher extends FooterWindowAttacher implements
     public void adjustContentView(View contentView) {
         super.adjustContentView(contentView);
         if (this.markState) {
-            benjin.append("(累加)");
+            benjin.setText("当年本金(累加)");
+        } else {
+            benjin.setText("当年本金");
         }
 
         mAdapter.setData(list);
@@ -75,7 +77,7 @@ public class DonationPopupAttacher extends FooterWindowAttacher implements
 
     boolean markState = false;
 
-    public void setData(String yuan, String rate, String years, boolean markState) {
+    public void setData(String yuan, String rate, String years, boolean markState, int addYear) {
         this.markState = markState;
         Money m = getInput(yuan);
         Money leijia = getInput(yuan);
@@ -92,7 +94,7 @@ public class DonationPopupAttacher extends FooterWindowAttacher implements
             RateResult rr = new RateResult();
             rr.year = "第" + (i + 1) + "年";
             rr.benjin = getInput(String.valueOf(moneyTemp.getDouble()));
-            if (this.markState && i > 0) {
+            if (this.markState && i > 0 && i< addYear) {
                 rr.benjin = getInput(String.valueOf(leijia.getDouble() + moneyTemp.getDouble()));
             }
             double all = rr.benjin.getDouble() * (1 + rat);
